@@ -1,0 +1,22 @@
+version: '3.7'
+
+networks:
+  tg-bot-sandbox-network:
+    external: true # docker-compose.yml
+
+services:
+  tg-bot-sandbox-api:
+    networks:
+      - tg-bot-sandbox-network
+    image: aiogram/telegram-bot-api:latest
+    environment:
+      TELEGRAM_API_ID: ${TELEGRAM_API_ID}
+      TELEGRAM_API_HASH: ${TELEGRAM_API_HASH}
+      TELEGRAM_LOCAL: "true"
+    volumes:
+      - telegram-bot-api-data:/var/lib/telegram-bot-api
+    ports:
+      - 8082:8081
+
+volumes:
+  telegram-bot-api-data:

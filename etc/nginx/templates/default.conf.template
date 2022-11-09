@@ -1,0 +1,45 @@
+server {
+    include mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 90;
+    send_timeout 300;
+    types_hash_max_size 2048;
+    client_max_body_size 16m;
+    client_body_timeout 32;
+    client_header_timeout 32;
+    charset utf-8;
+
+	error_log /var/log/server/nginx-error.log;
+    access_log /var/log/server/nginx-access.log;
+
+    root /data/www/html;
+    index index.php;
+
+    listen [::]:80;
+    listen 80;
+
+    server_name _;
+
+    # Prevent nginx from serving dotfiles (.htaccess, .svn, .git, .hg, etc.)
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    if (!-e $request_filename){
+        rewrite ^(.*)$ /index.php break;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass ${PHP_HOST}:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}

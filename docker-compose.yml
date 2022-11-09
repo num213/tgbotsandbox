@@ -1,0 +1,43 @@
+version: '3.7'
+
+networks:
+  tg-bot-sandbox-network:
+    driver: bridge
+    name: tg-bot-sandbox-network
+
+services:
+  tg-bot-sandbox-nginx:
+    networks:
+      - tg-bot-sandbox-network
+    container_name: tg-bot-sandbox-nginx
+    environment:
+      PHP_HOST: tg-bot-sandbox-php
+    image: nginx:1.21-alpine
+    volumes:
+      - ./src:/data/www/html
+      - ./etc/nginx/templates:/etc/nginx/templates
+      - ./etc/logs/nginx-access.log:/var/log/server/nginx-access.log
+      - ./etc/logs/nginx-error.log:/var/log/server/nginx-error.log
+    depends_on:
+      - tg-bot-sandbox-php
+
+  tg-bot-sandbox-php:
+    networks:
+      - tg-bot-sandbox-network
+    container_name: tg-bot-sandbox-php
+    working_dir: /data/www/html
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - "ENV=dev" # 'dev'|'review'|'staging'|'production'
+      - "TELEGRAM_BOT_NAME=${TELEGRAM_BOT_NAME}"
+      - "TELEGRAM_BOT_API_ACCESS_TOKEN=${TELEGRAM_BOT_TOKEN}"
+    volumes:
+      - ./src:/data/www/html
+      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./etc/php/php.conf:/usr/local/etc/php-fpm.d/zzz-docker.conf
+      - ./etc/logs/php-fpm-error.log:/var/log/server/php-fpm-error.log
+      - ./etc/logs/php-error.log:/var/log/server/php-error.log
+    labels:
+      - traefik.enable=false
