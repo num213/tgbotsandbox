@@ -8,8 +8,8 @@ nbproject
 .env_make
 
 # logs
-etc/logs/
+etc/logs/*
 !etc/logs/.gitkeep
 
-src/logs/
+src/logs/*
 !src/logs/.gitkeep
