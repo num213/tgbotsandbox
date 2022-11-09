@@ -4,7 +4,7 @@
 
 Telegram Bot API - [https://core.telegram.org/bots/api](https://core.telegram.org/bots/api)
 
-## Установка
+## Локальная установка
 
 ### Telegram Bot
 Для локального тестирования предлагается создать **своего** бота.
@@ -23,8 +23,8 @@ Telegram Bot API - [https://core.telegram.org/bots/api](https://core.telegram.or
 ```
 TELEGRAM_API_ID=api_id
 TELEGRAM_API_HASH=api_hash
-TELEGRAM_BOT_NAME=bot name
-TELEGRAM_BOT_TOKEN=bot token
+TELEGRAM_BOT_NAME=bot_name
+TELEGRAM_BOT_TOKEN=bot_token
 ```
 
 ## Запуск
@@ -33,5 +33,4 @@ TELEGRAM_BOT_TOKEN=bot token
 ## Команды make
 * `make up` – запуск проекта
 * `make down` – остановка пректа
-* `sudo make init` – выполняется при первом запуске проекта после `up` и обязательно с `sudo`.
 * `make webhook` – получить информацию об установленном вебхуке
